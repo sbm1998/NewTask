@@ -29,12 +29,11 @@ export class UsersStore {
      loadingUser= false;
      searchText="";
      fName="";
-     dob=new Date();
+     dob:Date | null =null;
      selectedPlan="";
      searchResult:Users=[];
      error="";
-     planData=["Essesntial","Premium","Platinium","Basic","Gold","Diamond","FreeTrial",
-    "Bussiness","Standard","Student","Bronze","Starter"];
+     planData:string[]=[];
 
     @action getUserData(){
         this.setLoading(true);
@@ -42,7 +41,9 @@ export class UsersStore {
         .then(({data}: { data: ResponseUserType[]})=>{
             console.log(data);
             runInAction(() => {
-                this.users = this.searchResult = this.filterUserData(data);
+                const localStorageUserData = localStorage.getItem("user");
+                const parsedUserData = localStorageUserData ? JSON.parse(localStorageUserData) : []
+                this.users = this.searchResult = this.filterUserData(data).concat(parsedUserData);
             })
             this.setLoading(false);
         })
@@ -50,7 +51,7 @@ export class UsersStore {
     }
 
     @action setLoading(state:boolean){
-        this.loadingUser=state
+           this.loadingUser=state
     }
 
     @action filterUserData(data: ResponseUserType[]) {
@@ -107,7 +108,7 @@ export class UsersStore {
         this.fName=name;
 
     }
-    @action setDob=(date:Date)=>{
+    @action setDob=(date:Date | null)=>{
         this.dob=date;
     }
 
@@ -117,6 +118,11 @@ export class UsersStore {
 
     @action errorForm=(value:string)=>{
         this.error=value
+    }
+
+    @action setUsersPlan=()=>{
+        this.planData=["Essesntial","Premium","Platinium","Basic","Gold","Diamond","FreeTrial",
+        "Bussiness","Standard","Student","Bronze","Starter"];
     }
 
 
