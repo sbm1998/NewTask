@@ -35,7 +35,7 @@ const RandomData:React.FC<Props>= (props)=>{
             <button onClick={() =>{history.push("/search");}}>Click To Search User</button>
             <button className="fetchUser" onClick={getData}>Fetch Users</button>
             <button className="updateplan " onClick={changeAllUsersSubscriptionPlan}>Update subscription plan</button>
-            <button className="cancelupdate">Cancel updating</button>
+           
             <div>
                {loadingUser ? <div>Loading...</div> : 
                 <table>
