@@ -28,9 +28,9 @@ export class UsersStore {
      users:Users=[];
      loadingUser= false;
      searchText="";
-     fName="";
+     username="";
      dob:Date | null =null;
-     selectedPlan="";
+     plan="";
      searchResult:Users=[];
      error="";
      planData:string[]=[];
@@ -49,9 +49,12 @@ export class UsersStore {
         })
 
     }
+    @action localStorageFormData=()=>{
+        
+    }
 
     @action setLoading(state:boolean){
-           this.loadingUser=state
+       this.loadingUser=state
     }
 
     @action filterUserData(data: ResponseUserType[]) {
@@ -105,7 +108,7 @@ export class UsersStore {
     }
 
     @action setFname=(name:string)=>{
-        this.fName=name;
+        this.username=name;
 
     }
     @action setDob=(date:Date | null)=>{
@@ -113,7 +116,7 @@ export class UsersStore {
     }
 
     @action setPlan=(planValue:string)=>{
-        this.selectedPlan=planValue;
+        this.plan=planValue;
     }
 
     @action errorForm=(value:string)=>{
@@ -124,7 +127,6 @@ export class UsersStore {
         this.planData=["Essesntial","Premium","Platinium","Basic","Gold","Diamond","FreeTrial",
         "Bussiness","Standard","Student","Bronze","Starter"];
     }
-
 
 }
 
