@@ -1,5 +1,6 @@
 import {action,runInAction, makeAutoObservable} from 'mobx';
-import axios from 'axios';
+import axios, { AxiosStatic } from 'axios';
+import ts from 'typescript';
 
 type Users={
     username:string;
@@ -20,6 +21,29 @@ type ResponseUserDataType={
     data:ResponseUserType[]
 }
 
+const retryWrapper = (axios:AxiosStatic, options:{
+    retry_status_code?:number,
+    retry_time:number
+}) => {
+    const max_time = options.retry_time;
+    const retry_status_code = options.retry_status_code;
+    let counter = 1;
+    //@ts-ignore//
+    axios.interceptors.response.use(null, (error) => {
+        /** @type {import("axios").AxiosRequestConfig} */
+        const config = error.config
+        // you could defined status you want to retry, such as 503
+        // if (counter < max_time && error.response.status === retry_status_code) {
+        if (counter < max_time) {
+            counter++
+            return new Promise((resolve) => {
+                resolve(axios(config))
+            })
+        }
+        return Promise.reject(error)
+    })
+}
+
 export class UsersStore {
     constructor() {
         makeAutoObservable(this);
@@ -37,7 +61,13 @@ export class UsersStore {
 
     @action getUserData(){
         this.setLoading(true);
+
+    const options = {
+    retry_time: 3
+    }
+    retryWrapper(axios,options);
         axios.get("https://random-data-api.com//api/users/random_user?size=30")
+
         .then(({data}: { data: ResponseUserType[]})=>{
             console.log(data);
             runInAction(() => {
@@ -46,11 +76,19 @@ export class UsersStore {
                 this.users = this.searchResult = this.filterUserData(data).concat(parsedUserData);
             })
             this.setLoading(false);
+        }).catch((e)=>{
+            console.log(e);
+            this.setLoading(false);
+            alert(e.message);
         })
 
     }
     @action localStorageFormData=()=>{
-        
+        runInAction(()=>{
+            const localStorageData=localStorage.getItem("user");
+            const parseFormData=localStorageData ? JSON.parse(localStorageData) : [];
+            console.log(parseFormData);
+        })
     }
 
     @action setLoading(state:boolean){
