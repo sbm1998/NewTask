@@ -1,6 +1,7 @@
 import React, { useEffect, ChangeEvent } from "react";
 import { inject, observer } from "mobx-react";
 import { UsersStore } from "../Stores/Users";
+import { useHistory } from "react-router-dom";
 import "./Style.css";
 
 type StoreProps = {
@@ -10,6 +11,7 @@ type StoreProps = {
 interface Props extends StoreProps {}
 
 const SearchUsers: React.FC<Props> = (props) => {
+  let history = useHistory();
   const { setSearchText, searchText, getFilterUsers } = props.UsersStore;
 
   useEffect(() => {
@@ -27,6 +29,15 @@ const SearchUsers: React.FC<Props> = (props) => {
   return (
     <>
       <h1>User Search Form</h1>
+      <div className="designButton">
+        <button
+          onClick={() => {
+            history.push("/");
+          }}
+        >
+          Home
+        </button>
+      </div>
       <form>
         SearchBox:{" "}
         <input
@@ -37,7 +48,6 @@ const SearchUsers: React.FC<Props> = (props) => {
           value={searchText}
         />
         <br />
-        {/* <button>Submit</button>  */}
         <br />
       </form>
 
@@ -62,5 +72,4 @@ const SearchUsers: React.FC<Props> = (props) => {
     </>
   );
 };
-
 export default inject("UsersStore")(observer(SearchUsers));

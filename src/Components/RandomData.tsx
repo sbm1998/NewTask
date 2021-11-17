@@ -20,11 +20,6 @@ const RandomData: React.FC<Props> = (props) => {
     changeAllUsersSubscriptionPlan,
   } = props.UsersStore;
 
-  console.log(users);
-
-  // useEffect(() => {
-  //     props.UsersStore.getUserData()
-  // }, [])
   const getData = () => {
     props.UsersStore.getUserData();
   };
@@ -34,26 +29,31 @@ const RandomData: React.FC<Props> = (props) => {
   };
   return (
     <div>
-      <button
-        onClick={() => {
-          history.push("/form");
-        }}
-      >
-        UserForm
-      </button>
-      <button
-        onClick={() => {
-          history.push("/search");
-        }}
-      >
-        Click To Search User
-      </button>
-      <button className="fetchUser" onClick={getData}>
-        Fetch Users
-      </button>
-      <button className="updateplan " onClick={changeAllUsersSubscriptionPlan}>
-        Update subscription plan
-      </button>
+      <div className="designButton">
+        <button
+          onClick={() => {
+            history.push("/form");
+          }}
+        >
+          UserForm
+        </button>
+        <button
+          onClick={() => {
+            history.push("/search");
+          }}
+        >
+          Click To Search User
+        </button>
+        <button className="fetchUser" onClick={getData}>
+          Fetch Users
+        </button>
+        <button
+          className="updateplan "
+          onClick={changeAllUsersSubscriptionPlan}
+        >
+          Update subscription plan
+        </button>
+      </div>
 
       <div>
         {loadingUser ? (
@@ -72,7 +72,6 @@ const RandomData: React.FC<Props> = (props) => {
                 return (
                   <tr>
                     <td> {item.username}</td>
-
                     <td>
                       {item.changingPlan ? <div>changing..</div> : item.plan}
                     </td>

@@ -1,13 +1,15 @@
 .fetchUser{
+    color: #fff;
     background-color: red;
     border-radius: 15px;
     font-size: large;
-    font-weight: bold;
+    font-weight: 500;
 }
 .updateplan{
+    color: #fff;
     background-color: blue;
     font-size: medium;
-    font-weight: bold;
+    font-weight: 500;
 }
 .cancelupdate{
     background-color: green;
@@ -15,5 +17,38 @@
     font-weight: bold;
 }
 table, th, td {
-    border: 1px solid black;
+    border: 2px solid black;
+    margin: 5px;
+    border-collapse: unset;
   }
+
+table button {
+      border: 2px solid black;
+
+    }
+
+.designButton {
+    border: 2px solid #000;
+    margin: 30px auto 20px;
+    padding: 10px;
+    width: 60%;
+}
+.designButton button {
+      font-size: 15px;
+      margin: 5px 5px;
+      padding: 6px 10px;
+      text-transform: capitalize;
+  }
+
+form {
+    border: 2px solid black;
+    text-align: left;
+    margin: 5px;
+    padding: 5px;
+    width: 349px;
+}
+
+label {
+    width: 100px;
+    text-align: left;
+}

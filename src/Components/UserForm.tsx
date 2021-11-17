@@ -1,8 +1,8 @@
 import React, { ChangeEvent, useEffect } from "react";
 import { UsersStore } from "../Stores/Users";
 import { inject, observer } from "mobx-react";
+import { useHistory } from "react-router-dom";
 import "./Style.css";
-import { Form, Button } from "react-bootstrap";
 
 type StoreProps = {
   UsersStore: UsersStore;
@@ -11,6 +11,7 @@ type StoreProps = {
 interface Props extends StoreProps {}
 
 const UserForm: React.FC<Props> = (props) => {
+  let history = useHistory();
   const {
     setFname,
     setDob,
@@ -20,6 +21,8 @@ const UserForm: React.FC<Props> = (props) => {
     plan,
     setUsersPlan,
     error,
+    getUserData,
+    changeAllUsersSubscriptionPlan,
   } = props.UsersStore;
 
   const handleFname = (e: ChangeEvent<HTMLInputElement>) => {
@@ -53,9 +56,8 @@ const UserForm: React.FC<Props> = (props) => {
     parseUserData.push(userFormData);
 
     localStorage.setItem("user", JSON.stringify(parseUserData));
-    // console.log(userFormData)
+
     setFname("");
-    // document.getElementById("dateinput")?.value = ""
     setDob(null);
     setPlan("");
   };
@@ -66,65 +68,54 @@ const UserForm: React.FC<Props> = (props) => {
   }, []);
   return (
     <>
+      <div className="designButton">
+        <button
+          onClick={() => {
+            history.push("/");
+          }}
+        >
+          Home
+        </button>
+      </div>
       <form>
-        <h1>UserForm</h1>
-        <label htmlFor="fname">First Name:</label>
-        <br />
-        <input
-          type="text"
-          id="fname"
-          name="fname"
-          onChange={handleFname}
-          value={username}
-          required
-        />
-        <br />
-        <br />
-        <div>{error}</div>
-        <label htmlFor="dob">Date of Birth:</label>
-        <br />
-        <input
-          type="date"
-          id="dateinput"
-          name="date"
-          onChange={handleDob}
-          required
-        />
-        <br /> <br />
-        <label htmlFor="plan">Plan:</label>
-        <br />
-        <select onChange={handlePlan} value={plan}>
-          {props.UsersStore.planData.map((item) => {
-            return <option key={item}>{item}</option>;
-          })}
-        </select>
-        <br />
-        <br />
-        {/* <input type="reset" value="Reset" /> */}
-        <input type="submit" value="Submit" onClick={handleValidation} />
+        <div className="designForm">
+          <h1>UserForm</h1>
+          <label htmlFor="fname">First Name:</label>
+          <br />
+          <input
+            type="text"
+            id="fname"
+            name="fname"
+            onChange={handleFname}
+            value={username}
+            required
+          />
+          <br />
+          <br />
+          <div>{error}</div>
+          <label htmlFor="dob">Date of Birth:</label>
+          <br />
+          <input
+            type="date"
+            id="dateinput"
+            name="date"
+            onChange={handleDob}
+            required
+          />
+          <br /> <br />
+          <label htmlFor="plan">Plan:</label>
+          <br />
+          <select onChange={handlePlan} value={plan}>
+            {props.UsersStore.planData.map((item) => {
+              return <option key={item}>{item}</option>;
+            })}
+          </select>
+          <br />
+          <br />
+          <input type="submit" value="Submit" onClick={handleValidation} />
+        </div>
       </form>
 
-      {/* <Form>
-  <Form.Group className="mb-3" controlId="formBasicEmail">
-    <Form.Label>Email address</Form.Label>
-    <Form.Control type="email" placeholder="Enter email" />
-    <Form.Text className="text-muted">
-      We'll never share your email with anyone else.
-    </Form.Text>
-  </Form.Group>
-
-  <Form.Group className="mb-3" controlId="formBasicPassword">
-    <Form.Label>Password</Form.Label>
-    <Form.Control type="password" placeholder="Password" />
-  </Form.Group>
-  <Form.Group className="mb-3" controlId="formBasicCheckbox">
-    <Form.Check type="checkbox" label="Check me out" />
-  </Form.Group>
-  <Button variant="primary" type="submit">
-    Submit
-  </Button>
-</Form>
-   */}
       <div>
         <table>
           <thead>
@@ -152,5 +143,4 @@ const UserForm: React.FC<Props> = (props) => {
     </>
   );
 };
-
 export default inject("UsersStore")(observer(UserForm));

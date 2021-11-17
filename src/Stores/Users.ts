@@ -1,6 +1,5 @@
 import {action,runInAction, makeAutoObservable} from 'mobx';
 import axios, { AxiosStatic } from 'axios';
-import ts from 'typescript';
 
 type Users={
     username:string;
@@ -30,10 +29,7 @@ const retryWrapper = (axios:AxiosStatic, options:{
     let counter = 1;
     //@ts-ignore//
     axios.interceptors.response.use(null, (error) => {
-        /** @type {import("axios").AxiosRequestConfig} */
         const config = error.config
-        // you could defined status you want to retry, such as 503
-        // if (counter < max_time && error.response.status === retry_status_code) {
         if (counter < max_time) {
             counter++
             return new Promise((resolve) => {
@@ -43,12 +39,10 @@ const retryWrapper = (axios:AxiosStatic, options:{
         return Promise.reject(error)
     })
 }
-
 export class UsersStore {
     constructor() {
         makeAutoObservable(this);
     }
-    
      users:Users=[];
      loadingUser= false;
      searchText="";
@@ -69,7 +63,6 @@ export class UsersStore {
         axios.get("https://random-data-api.com//api/users/random_user?size=30")
 
         .then(({data}: { data: ResponseUserType[]})=>{
-            console.log(data);
             runInAction(() => {
                 const localStorageUserData = localStorage.getItem("user");
                 const parsedUserData = localStorageUserData ? JSON.parse(localStorageUserData) : []
@@ -90,7 +83,6 @@ export class UsersStore {
             console.log(parseFormData);
         })
     }
-
     @action setLoading(state:boolean){
        this.loadingUser=state
     }
@@ -106,13 +98,7 @@ export class UsersStore {
     }
     @action changeUserSubscriptionPlan = (userid:number) => {
         this.setChangingData(true,userid);
-        setTimeout(()=>{
-        //   const currentUser=this.users.filter(item=>{
-        //         return item.id==userid;         
-        //     })
-        //     console.log(currentUser)
-        //  const changeData = this.users.filter(item=>item.id===userid).plan="ultra" 
-        
+        setTimeout(()=>{ 
         const changeData=this.users.filter(item=>item.id===userid).forEach(item=>item.plan="Ultra")
         console.log(changeData);
         this.setChangingData(false,userid);
@@ -167,7 +153,7 @@ export class UsersStore {
     }
 
 }
-
 const store=new UsersStore();
 
 export default store;
+
